@@ -1,145 +1,139 @@
-# 24/7 AI Fundraising Agent - Recovery Scholarships
+# Recovery Scholarships Fundraising Platform
 
-A comprehensive fundraising platform for nonprofits providing scholarships for people in recovery to enter sober living facilities.
+A fundraising platform built to help nonprofits raise money for recovery scholarships - providing financial assistance for people in recovery to access sober living facilities and support services.
 
-## 🚀 Features
+## What This Platform Does
 
-- **24/7 AI Fundraising Agent**: Automated prospect research and outreach
-- **Donor Management**: Complete CRM with donor profiles and donation history
-- **Campaign Management**: Multi-channel fundraising campaigns with analytics
-- **Compliance**: GDPR, CAN-SPAM, and privacy law compliance
-- **Real-time Analytics**: Performance metrics and donor insights
-- **SEO Optimized**: Search engine optimized for maximum visibility
-- **Accessibility**: WCAG 2.2 AA compliant for inclusive access
+This is a complete fundraising management system that helps organizations:
 
-## 🛠️ Tech Stack
+- **Manage Donors**: Keep track of donor information, donation history, and communication preferences
+- **Run Fundraising Campaigns**: Create and manage multiple fundraising campaigns with real-time progress tracking
+- **Process Donations**: Accept one-time and recurring donations with secure payment processing
+- **Stay Compliant**: Built-in tools to ensure compliance with fundraising regulations and privacy laws
+- **Track Performance**: See what's working with detailed analytics on campaign performance and donor engagement
 
-- **Frontend**: React + TypeScript + Vite
-- **Backend**: Express.js + Node.js
-- **Database**: Supabase (PostgreSQL)
-- **State Management**: Zustand
-- **Styling**: Tailwind CSS
-- **Email**: Nodemailer + SendGrid
-- **Authentication**: Supabase Auth
+## Who This Is For
 
-## 📦 Installation
+Nonprofit organizations, recovery centers, and community groups that provide:
+- Recovery scholarships for sober living
+- Financial assistance for treatment programs
+- Support services for people in recovery
+- Community-based recovery initiatives
 
-1. Clone the repository
-2. Install dependencies:
+## Getting Started
+
+### Quick Setup
+
+1. **Clone and Install**
    ```bash
+   git clone https://github.com/oranolio956/AI-Agent---Fundraising-.git
+   cd AI-Agent---Fundraising-
    npm install
    ```
 
-3. Set up environment variables:
+2. **Configure Environment**
    ```bash
-   cp .env.production .env
-   # Edit .env with your actual values
+   cp .env.example .env
+   # Edit .env with your Supabase credentials and settings
    ```
 
-4. Run the development server:
+3. **Run Development Server**
    ```bash
    npm run dev
    ```
 
-## 🔧 Configuration
+### Database Setup
 
-### Supabase Setup
+The platform uses Supabase (PostgreSQL) for data storage. You'll need to:
 
-1. Create a Supabase project
-2. Copy your project URL and anon key
-3. Update the `.env` file with your Supabase credentials
+1. Create a free Supabase account at supabase.com
+2. Create a new project
+3. Copy your project URL and API keys to the `.env` file
+4. The database schema will be automatically applied
 
-### Email Configuration
+### Environment Variables
 
-Configure email settings in `.env`:
-- SMTP settings for transactional emails
-- SendGrid API key for bulk campaigns
+Key settings you'll need to configure:
 
-### Payment Processing
+```
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-Set up Stripe integration:
-- Add your Stripe secret and publishable keys
-- Configure webhook endpoints for payment processing
+# Email Configuration
+SMTP_HOST=your_email_provider
+SMTP_PORT=587
+SMTP_USER=your_email
+SMTP_PASS=your_password
 
-## 🚀 Deployment
-
-### Railway Deployment (Recommended)
-
-1. Connect your GitHub repository to Railway
-2. Set environment variables from `.env.production`
-3. Deploy with one click
-
-### Docker Deployment
-
-```bash
-docker build -t fundraising-agent .
-docker run -p 3000:3000 --env-file .env fundraising-agent
+# Payment Processing (Optional)
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
 ```
 
-### Vercel Deployment
+## Platform Features
 
-1. Connect your repository to Vercel
-2. Configure environment variables
-3. Deploy automatically on push
+### Donor Management
+- Complete donor profiles with contact information and preferences
+- Donation history and giving patterns
+- Communication tracking and notes
+- Segmentation tools for targeted outreach
 
-## 📊 Database Schema
+### Campaign Management
+- Create multiple fundraising campaigns
+- Set goals and track progress in real-time
+- A/B testing for campaign messaging
+- Automated thank you messages and receipts
 
-The application uses the following main tables:
+### Donation Processing
+- Secure online donation forms
+- One-time and recurring donation options
+- Multiple payment methods (credit card, bank transfer)
+- Automatic tax receipt generation
 
-- **donors**: Donor information and profiles
-- **donations**: Individual donation records
-- **campaigns**: Fundraising campaigns
-- **prospects**: Potential donor leads
-- **communications**: Interaction history
-- **recurring_donations**: Subscription donations
-- **compliance_logs**: Privacy and compliance tracking
+### Analytics Dashboard
+- Real-time donation tracking
+- Campaign performance metrics
+- Donor retention and acquisition insights
+- Export reports for board meetings
 
-## 🔒 Security & Compliance
+### Compliance Tools
+- GDPR-compliant data handling
+- CAN-SPAM email compliance
+- Donation receipt management
+- Privacy policy and terms generators
 
-- **GDPR Compliant**: Data protection and privacy rights
-- **CAN-SPAM Compliant**: Email marketing regulations
-- **Data Encryption**: Sensitive data protection
-- **Access Control**: Role-based permissions
-- **Audit Logging**: Complete activity tracking
+## Deployment Options
 
-## 📈 Analytics & Reporting
+### Option 1: Railway (Recommended)
+- Connect your GitHub repository
+- Automatic deployments on code changes
+- Built-in database and SSL
+- Simple environment variable management
 
-- **Real-time Metrics**: Live donation tracking
-- **Donor Insights**: Behavior and preference analysis
-- **Campaign Performance**: ROI and conversion metrics
-- **Predictive Analytics**: Donation forecasting
+### Option 2: Vercel
+- One-click deployment from GitHub
+- Global CDN for fast loading
+- Automatic HTTPS
+- Serverless functions for backend
 
-## 🤖 24/7 Worker System
+### Option 3: Docker
+```bash
+docker build -t fundraising-platform .
+docker run -p 3000:3000 --env-file .env fundraising-platform
+```
 
-The platform includes an automated worker system that:
-- Researches potential donors continuously
-- Sends personalized outreach campaigns
-- Tracks engagement and responses
-- Updates prospect scores and priorities
-- Maintains compliance with outreach regulations
+## Support and Documentation
 
-## 🎯 Key Performance Indicators
+If you need help getting started:
+- Check the deployment guides in the repository
+- Review the database schema in `supabase/migrations/`
+- Open an issue on GitHub for technical questions
 
-- **Donation Conversion Rate**: Target 15-25%
-- **Donor Retention Rate**: Target 60-80%
-- **Average Gift Size**: Target $150-500
-- **Cost per Dollar Raised**: Target $0.15-0.25
-- **Email Open Rate**: Target 25-35%
-- **Response Rate**: Target 5-15%
+## License
 
-## 📞 Support
+This project is open source and available under the MIT License. Feel free to use, modify, and distribute as needed for your organization.
 
-For support and questions:
-- Email: support@recoveryscholarships.org
-- Documentation: [docs.recoveryscholarships.org](https://docs.recoveryscholarships.org)
-- Issues: [GitHub Issues](https://github.com/your-org/fundraising-agent/issues)
+---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Built for nonprofits supporting recovery and sober living
-- Designed with accessibility and inclusivity in mind
-- Powered by modern web technologies and AI
+*Built for the recovery community, by people who care about recovery.*
