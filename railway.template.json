@@ -1,0 +1,31 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "npm run build",
+    "startCommand": "npm start"
+  },
+  "deploy": {
+    "startCommand": "npm start",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 300,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  },
+  "environments": {
+    "production": {
+      "variables": {
+        "NODE_ENV": "production",
+        "PORT": "3000",
+        "WORKER_ENABLED": "true",
+        "WORKER_INTERVAL_MINUTES": "15"
+      }
+    }
+  },
+  "plugins": [
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "description": "PostgreSQL database service"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+# 🚂 Railway Deployment Configuration
+# This file configures the project for Railway deployment
+
+# Build command
+build: npm run build
+
+# Start command  
+cmd: npm run server
+
+# Environment variables will be set in Railway dashboard
+# Copy values from .env.production.template
