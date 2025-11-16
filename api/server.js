@@ -13,6 +13,38 @@ import { dirname, join } from 'path'
 // Load environment variables
 dotenv.config()
 
+// Agent configuration (overridable via environment variables)
+const agentConfig = {
+  orgName: process.env.ORG_NAME || 'The Re-Entry Bridge',
+  locationCity: process.env.ORG_CITY || 'Los Angeles',
+  locationRegion: process.env.ORG_REGION || 'California',
+  program: {
+    kitCost: parseFloat(process.env.KIT_COST || '150'),
+    scholarshipCostMin: parseFloat(process.env.SCHOLARSHIP_COST_MIN || '750'),
+    scholarshipCostMax: parseFloat(process.env.SCHOLARSHIP_COST_MAX || '1500')
+  },
+  goals: {
+    year1Kits: parseInt(process.env.YEAR1_KITS || '200'),
+    year2Kits: parseInt(process.env.YEAR2_KITS || '400'),
+    year2Scholarships: parseInt(process.env.YEAR2_SCHOLARSHIPS || '50')
+  },
+  outreach: {
+    tone: process.env.OUTREACH_TONE || 'hopeful, professional, urgent',
+    dayOneStory:
+      process.env.DAY_ONE_STORY ||
+      "The most vulnerable period for relapse is the first 24 hours out of treatment. An individual arrives at a sober living home with nothing, facing the immediate, overwhelming stress of how to get groceries, toothpaste, or a bus pass. Our $150 'Day One Kit' removes that friction, providing dignity and a bridge to their first recovery meeting. It's not just groceries; it's the first step in a stable recovery."
+  },
+  keywords: [
+    're-entry',
+    'sober living',
+    'recovery scholarship',
+    'Day One',
+    'Los Angeles',
+    'housing stability',
+    'social determinants of health'
+  ]
+}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -358,10 +390,18 @@ async function findRelevantFoundations() {
 function calculateDonorScore(prospect) {
   // Simple scoring algorithm
   const affinityWeight = 0.6
-  const capacityWeight = 0.4
+  const capacityWeight = 0.3
+  const geoWeight = 0.1
   
-  return (prospect.cause_affinity_score * affinityWeight) + 
-         (prospect.giving_capacity_score * capacityWeight)
+  const affinity = prospect.cause_affinity_score || prospect.affinity_score || 0
+  const capacity = prospect.giving_capacity_score || prospect.capacity_score || 0
+  const geoBoost = (prospect.location || '')
+    .toLowerCase()
+    .includes(agentConfig.locationCity.toLowerCase()) ? 1 : 0
+  
+  return (affinity * affinityWeight) + 
+         (capacity * capacityWeight) +
+         (geoBoost * geoWeight)
 }
 
 async function executeCampaign(campaign) {
@@ -582,6 +622,28 @@ app.listen(PORT, async () => {
     runDonorScoring()
     runAnalyticsAggregation()
   }, 5000)
+  
+  // Ensure at least one default outreach campaign exists, using Day One Story
+  try {
+    const { data: existingCampaigns } = await supabase
+      .from('outreach_campaigns')
+      .select('id')
+      .eq('status', 'scheduled')
+      .limit(1)
+    
+    if (!existingCampaigns || existingCampaigns.length === 0) {
+      await supabase.from('outreach_campaigns').insert({
+        subject_line: `Help fund a $${agentConfig.program.kitCost} Day One Kit in ${agentConfig.locationCity}`,
+        message_content: `<p>${agentConfig.outreach.dayOneStory}</p><p>With a gift of $${agentConfig.program.kitCost}, you can sponsor a Day One Kit for someone entering sober living in ${agentConfig.locationCity}. We are formalizing partnerships with sober livings to deliver kits at intake, and with further funding, we will provide first-month rent scholarships ($${agentConfig.program.scholarshipCostMin}–$${agentConfig.program.scholarshipCostMax}).</p>`,
+        status: 'scheduled',
+        scheduled_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+        created_at: new Date().toISOString()
+      })
+      logger.info('Inserted default outreach campaign based on Day One Story')
+    }
+  } catch (err) {
+    logger.warn('Could not ensure default outreach campaign:', err?.message)
+  }
 })
 
 export default app
